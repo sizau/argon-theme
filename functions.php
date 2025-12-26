@@ -3118,7 +3118,7 @@ function init_shuoshuo(){
 		'exclude_from_search' => true,
 		'query_var' => true,
 		'rewrite' => array(
-			'slug' => 'moments',
+			'slug' => 'moments/%post_id%',
 			'with_front' => false
 		),
 		'capability_type' => 'post',
@@ -3130,6 +3130,21 @@ function init_shuoshuo(){
 	);
 	register_post_type('shuoshuo', $args);
 }
+
+// 为说说添加自定义固定链接结构，使用 ID 而不是标题
+function shuoshuo_post_link($post_link, $post) {
+	if ($post->post_type === 'shuoshuo') {
+		return home_url('/moments/' . $post->ID . '/');
+	}
+	return $post_link;
+}
+add_filter('post_type_link', 'shuoshuo_post_link', 10, 2);
+
+// 添加 rewrite 规则来处理 /moments/ID/ 格式的 URL
+function shuoshuo_rewrite_rules() {
+	add_rewrite_rule('^moments/([0-9]+)/?$', 'index.php?post_type=shuoshuo&p=$matches[1]', 'top');
+}
+add_action('init', 'shuoshuo_rewrite_rules');
 
 function argon_get_search_post_type_array(){
 	$search_filters_type = get_option("argon_search_filters_type", "*post,*page,shuoshuo");
