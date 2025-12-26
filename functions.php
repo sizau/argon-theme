@@ -3118,7 +3118,7 @@ function init_shuoshuo(){
 		'exclude_from_search' => true,
 		'query_var' => true,
 		'rewrite' => array(
-			'slug' => 'shuoshuo',
+			'slug' => 'moments',
 			'with_front' => false
 		),
 		'capability_type' => 'post',
